@@ -1,0 +1,61 @@
+MPLINK 4.40, Linker
+Linker Map File - Created Sat Sep 28 20:21:41 2019
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x0000e4
+.config_2007_MESAFE_SENSOR.O       code   0x002007    program   0x000002
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000071      
+                            0x002007    0x002007      
+            115 out of 8454 program addresses used, program memory utilization is 1%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+    BIRLER_BASAMAGINI_BUL   0x000033    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+        BIRLER_BAS_GOSTER   0x000018    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+            DELAY_50_MSEC   0x000068    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+                     LOOP   0x00000d    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+              LOOP_BIRLER   0x000035    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+               LOOP_ONLAR   0x000040    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+               LOOP_Onlar   0x000045    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+              LOOP_YUZLER   0x000050    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+               Loop_Inner   0x00006d    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+               Loop_Outer   0x00006c    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+     ONLAR_BASAMAGINI_BUL   0x00003c    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+         ONLAR_BAS_GOSTER   0x000021    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+    YUZLER_BASAMAGINI_BUL   0x00004c    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+        YUZLER_BAS_GOSTER   0x00002a    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+          my_lookUP_table   0x000056    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                     LOOP   0x00000d    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+        BIRLER_BAS_GOSTER   0x000018    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+         ONLAR_BAS_GOSTER   0x000021    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+        YUZLER_BAS_GOSTER   0x00002a    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+    BIRLER_BASAMAGINI_BUL   0x000033    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+              LOOP_BIRLER   0x000035    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+     ONLAR_BASAMAGINI_BUL   0x00003c    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+               LOOP_ONLAR   0x000040    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+               LOOP_Onlar   0x000045    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+    YUZLER_BASAMAGINI_BUL   0x00004c    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+              LOOP_YUZLER   0x000050    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+          my_lookUP_table   0x000056    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+            DELAY_50_MSEC   0x000068    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+               Loop_Outer   0x00006c    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+               Loop_Inner   0x00006d    program     static D:\Projeler\Mplab\mesafe_sensor.asm
+
+

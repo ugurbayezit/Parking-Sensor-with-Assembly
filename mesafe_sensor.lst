@@ -1,0 +1,809 @@
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[205]: Found directive in column 1. (LIST)
+                      00001 LIST P=16F877A
+Warning[205]: Found directive in column 1. (INCLUDE)
+                      00002 INCLUDE "P16f877A.INC"
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ;  MPASM PIC16F877A processor include
+                      00005 ; 
+                      00006 ;  (c) Copyright 1999-2011 Microchip Technology, All rights reserved
+                      00007 ;==========================================================================
+                      00008 
+                      00555         LIST
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3F3A           00003 __CONFIG _HS_OSC & _WDT_OFF & _PWRTE_OFF & _CP_OFF & _LVP_OFF & _BODEN_OFF
+                      00004 ;org 0x00;
+                      00005 ;goto start
+                      00006 ;org 0x04; 
+  00000020            00007 trig EQU h'20'
+  00000027            00008 Counter equ 0x27;
+  00000025            00009 Counter_Outer equ 0x25 ; free RAM location 12
+  00000026            00010 Counter_Inner equ 0x26 ; free RAM location 13
+  00000028            00011 SAYAC EQU 0x28
+  00000021            00012 BIRLER_BASAMAGI EQU 0x21
+  00000022            00013 ONLAR_BASAMAGI EQU 0x22
+  0000004B            00014 YUZLER_BASAMAGI EQU 0x4B
+  0000005A            00015 deger equ 0x5A
+  00000010            00016 N equ .16;
+Warning[203]: Found opcode in column 1. (CLRF)
+0000   0186           00017 CLRF PORTB
+Warning[203]: Found opcode in column 1. (CLRF)
+0001   0188           00018 CLRF PORTD
+                      00019 ;BANKSEL TRISB
+                      00020 
+                      00021 ;BANKSEL PORTB
+                      00022 ;MOVLW h'07'
+                      00023 ;MOVWF CMCON
+                      00024 ;BCF PORTD,0
+                      00025 ;start
+                      00026  
+                      00027 ; movlw .0;
+                      00028  ;movwf TMR0;
+                      00029  
+0002   1683           00030  bsf STATUS, RP0;
+Warning[203]: Found opcode in column 1. (MOVLW)
+0003   3000           00031 MOVLW b'00000000'
+Warning[203]: Found opcode in column 1. (MOVWF)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0004   0086           00032 MOVWF TRISB
+Warning[203]: Found opcode in column 1. (MOVLW)
+0005   3000           00033 MOVLW b'00000000'
+Warning[203]: Found opcode in column 1. (MOVWF)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0006   0088           00034 MOVWF TRISD
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0007   1281           00035  bcf OPTION_REG, T0CS; At each clock cycle, timer value will be incremented
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0008   1181           00036  bcf OPTION_REG, PSA; Prescalar value is assigned to TMR0 register
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0009   1501           00037  bsf OPTION_REG, PS2;
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000A   1481           00038  bsf OPTION_REG, PS1;
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000B   1401           00039  bsf OPTION_REG, PS0;
+                      00040  ; TMR0 rate is 1:2 which means that every 2 clock cycles timer value will be incremented
+                      00041  ; For the other prescalar values see the lecture notes
+                      00042 
+000C   1283           00043  bcf STATUS, RP0;
+                      00044 ; bsf INTCON, GIE;
+                      00045 ; bsf INTCON, TMR0IE;
+                      00046 ; bcf INTCON, TMR0IF;
+                      00047 
+000D                  00048 LOOP 
+                      00049 
+                      00050 
+Warning[203]: Found opcode in column 1. (movlw)
+000D   307B           00051 movlw .123
+Warning[203]: Found opcode in column 1. (movwf)
+000E   00A8           00052 movwf SAYAC
+Warning[203]: Found opcode in column 1. (CALL)
+000F   2018           00053 CALL BIRLER_BAS_GOSTER
+Warning[203]: Found opcode in column 1. (CALL)
+0010   2068           00054 CALL DELAY_50_MSEC
+Warning[203]: Found opcode in column 1. (CALL)
+0011   2021           00055 CALL ONLAR_BAS_GOSTER 
+Warning[203]: Found opcode in column 1. (CALL)
+0012   2068           00056 CALL DELAY_50_MSEC
+Warning[203]: Found opcode in column 1. (CALL)
+0013   2021           00057 CALL ONLAR_BAS_GOSTER 
+Warning[203]: Found opcode in column 1. (CALL)
+0014   2068           00058 CALL DELAY_50_MSEC
+Warning[203]: Found opcode in column 1. (CALL)
+0015   202A           00059 CALL YUZLER_BAS_GOSTER
+Warning[203]: Found opcode in column 1. (CALL)
+0016   2068           00060 CALL DELAY_50_MSEC
+Warning[203]: Found opcode in column 1. (GOTO)
+0017   280D           00061 GOTO LOOP
+                      00062 
+                      00063         ;bsf PORTD,0
+                      00064 ;       CALL Gecikme
+                      00065 ;       bcf PORTD,0
+                      00066 ;echo
+                      00067 ;       clrf PORTB;
+                      00068 ;       bsf STATUS,RP0;
+                      00069 ;       clrf TRISB;
+                      00070 ;       bsf PIE1,0
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00071 ;       bcf STATUS,RP0;
+                      00072 ;       bsf INTCON,7;
+                      00073 ;       bsf INTCON,6;
+                      00074 ;       bcf TMR1L,1;
+                      00075 ;       bsf TMR1L,0;
+                      00076 ;goto echo
+                      00077 ;veri
+                      00078 ;btfss PORTD,1;
+                      00079 ;goto veri
+                      00080 ;clrf TMR1L;
+                      00081 ;main
+                      00082 ;btfsc PORTD,1;
+                      00083 ;goto main
+                      00084 ;movlw TMR1L;
+                      00085 ;movlw .10
+                      00086 ;movwf SAYAC
+                      00087 
+                      00088 ;btfss timer,7
+                      00089 ;goto SEVEN_SEGMENT
+                      00090 ;btfss timer,6
+                      00091 ;goto SEVEN_SEGMENT
+                      00092 ;btfss timer,5
+                      00093 ;goto SEVEN_SEGMENT
+                      00094 ;btfss timer,4
+                      00095 ;goto SEVEN_SEGMENT
+                      00096 ;btfss timer,3
+                      00097 ;goto SEVEN_SEGMENT
+                      00098 ;btfss timer,2
+                      00099 ;goto SEVEN_SEGMENT
+                      00100 ;btfss timer,1
+                      00101 ;goto SEVEN_SEGMENT
+                      00102 ;btfss timer,0
+                      00103 ;goto SEVEN_SEGMENT
+                      00104 ;decfsz deger,F;
+                      00105 ;goto hesaplama
+                      00106 ;
+                      00107 ;SEVEN_SEGMENT
+                      00108 ;;LOOP_2
+                      00109 ;; CALL YUZLER_BAS_GOSTER
+                      00110 ;; CALL DELAY_50_MSEC
+                      00111 ; ;INCF SAYAC,F
+                      00112 ; ;MOVLW .100; SAYA? 100E ULASTI MI?
+                      00113 ; ;SUBWF SAYAC,W; SAYA? 100E ULASTI MI?
+                      00114 ; ;BTFSS STATUS,2; SAYA? 100E ULASTI MI?
+                      00115 ; ;GOTO LOOP_2
+                      00116 ;;GOTO SEVEN_SEGMENT
+                      00117 ;goto LOOP
+                      00118 ;
+                      00119 ;;ISR_TOCKI
+                      00120 ;
+                      00121 ;;bcf INTCON, TMR0IF;
+                      00122 ;;nop;
+                      00123 ;;nop;
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00124 ;;nop;
+                      00125 ;
+                      00126 ;;retfie; 
+0018                  00127 BIRLER_BAS_GOSTER
+0018   1508           00128  BSF PORTD,2
+0019   1188           00129  BCF PORTD,3
+001A   1208           00130  BCF PORTD,4
+001B   2033           00131  CALL BIRLER_BASAMAGINI_BUL
+001C   0821           00132  MOVF BIRLER_BASAMAGI,W
+001D   2056           00133  CALL my_lookUP_table;
+001E   0086           00134  MOVWF PORTB;
+001F   0986           00135  COMF PORTB,F
+Warning[203]: Found opcode in column 1. (RETURN)
+0020   0008           00136 RETURN
+                      00137 ;
+0021                  00138 ONLAR_BAS_GOSTER
+0021   1108           00139  BCF PORTD,2
+0022   1588           00140  BSF PORTD,3
+0023   1208           00141  BCF PORTD,4
+0024   203C           00142  CALL ONLAR_BASAMAGINI_BUL
+0025   0822           00143  MOVF ONLAR_BASAMAGI,W
+0026   2056           00144  CALL my_lookUP_table;
+0027   0086           00145  MOVWF PORTB;
+0028   0986           00146  COMF PORTB,F
+Warning[203]: Found opcode in column 1. (RETURN)
+0029   0008           00147 RETURN
+                      00148 
+002A                  00149 YUZLER_BAS_GOSTER
+Warning[203]: Found opcode in column 1. (BCF)
+002A   1108           00150 BCF PORTD,2
+Warning[203]: Found opcode in column 1. (BCF)
+002B   1188           00151 BCF PORTD,3
+Warning[203]: Found opcode in column 1. (BSF)
+002C   1608           00152 BSF PORTD,4
+Warning[203]: Found opcode in column 1. (CALL)
+002D   204C           00153 CALL YUZLER_BASAMAGINI_BUL
+Warning[203]: Found opcode in column 1. (MOVF)
+002E   084B           00154 MOVF YUZLER_BASAMAGI,W
+Warning[203]: Found opcode in column 1. (CALL)
+002F   2056           00155 CALL my_lookUP_table;
+Warning[203]: Found opcode in column 1. (MOVWF)
+0030   0086           00156 MOVWF PORTB;
+Warning[203]: Found opcode in column 1. (COMF)
+0031   0986           00157 COMF PORTB,F
+Warning[203]: Found opcode in column 1. (RETURN)
+0032   0008           00158 RETURN
+                      00159 
+0033                  00160 BIRLER_BASAMAGINI_BUL ;MOD 10 YAPILACAK 
+Warning[203]: Found opcode in column 1. (MOVF)
+0033   0828           00161 MOVF SAYAC,W
+Warning[203]: Found opcode in column 1. (MOVWF)
+0034   00A1           00162 MOVWF BIRLER_BASAMAGI
+0035                  00163 LOOP_BIRLER
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[203]: Found opcode in column 1. (MOVLW)
+0035   300A           00164 MOVLW .10
+Warning[203]: Found opcode in column 1. (SUBWF)
+0036   02A1           00165 SUBWF BIRLER_BASAMAGI,F
+Warning[203]: Found opcode in column 1. (BTFSC)
+0037   1803           00166 BTFSC STATUS,0;BORROW kontrol ediliyor
+Warning[203]: Found opcode in column 1. (GOTO)
+0038   2835           00167 GOTO LOOP_BIRLER
+Warning[203]: Found opcode in column 1. (MOVLW)
+0039   300A           00168 MOVLW .10; Eksiye d?st?g? i?in toplama yaptik.
+Warning[203]: Found opcode in column 1. (ADDWF)
+003A   07A1           00169 ADDWF BIRLER_BASAMAGI,F
+Warning[203]: Found opcode in column 1. (RETURN)
+003B   0008           00170 RETURN
+                      00171 ;
+003C                  00172 ONLAR_BASAMAGINI_BUL ;10'A BOLME YAPILACAK 
+Warning[203]: Found opcode in column 1. (MOVF)
+003C   0828           00173 MOVF SAYAC,W
+Warning[203]: Found opcode in column 1. (MOVWF)
+003D   00A3           00174 MOVWF 0X23
+Warning[203]: Found opcode in column 1. (MOVLW)
+003E   30FF           00175 MOVLW .255; ONLAR BASAMAGI 0'DAN BASLASIN ISTEDIK 255+1=0
+Warning[203]: Found opcode in column 1. (MOVWF)
+003F   00A2           00176 MOVWF ONLAR_BASAMAGI
+0040                  00177 LOOP_ONLAR
+Warning[203]: Found opcode in column 1. (INCF)
+0040   0AA2           00178 INCF ONLAR_BASAMAGI,F
+Warning[203]: Found opcode in column 1. (MOVLW)
+0041   300A           00179 MOVLW .10
+Warning[203]: Found opcode in column 1. (SUBWF)
+0042   02A3           00180 SUBWF 0X23,F
+Warning[203]: Found opcode in column 1. (BTFSC)
+0043   1803           00181 BTFSC STATUS,0;BORROW kontrol ediliyor
+Warning[203]: Found opcode in column 1. (GOTO)
+0044   2840           00182 GOTO LOOP_ONLAR
+0045                  00183 LOOP_Onlar
+Warning[203]: Found opcode in column 1. (MOVLW)
+0045   300A           00184 MOVLW .10
+Warning[203]: Found opcode in column 1. (SUBWF)
+0046   02A2           00185 SUBWF ONLAR_BASAMAGI,F
+Warning[203]: Found opcode in column 1. (BTFSC)
+0047   1803           00186 BTFSC STATUS,0
+Warning[203]: Found opcode in column 1. (GOTO)
+0048   2845           00187 GOTO LOOP_Onlar
+Warning[203]: Found opcode in column 1. (MOVLW)
+0049   300A           00188 MOVLW .10
+Warning[203]: Found opcode in column 1. (ADDWF)
+004A   07A2           00189 ADDWF ONLAR_BASAMAGI,F
+Warning[203]: Found opcode in column 1. (RETURN)
+004B   0008           00190 RETURN
+                      00191 
+004C                  00192 YUZLER_BASAMAGINI_BUL
+Warning[203]: Found opcode in column 1. (MOVF)
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+004C   08A8           00193 MOVF SAYAC,F
+Warning[203]: Found opcode in column 1. (MOVWF)
+004D   00A4           00194 MOVWF 0X24
+Warning[203]: Found opcode in column 1. (MOVLW)
+004E   30FF           00195 MOVLW .255
+Warning[203]: Found opcode in column 1. (MOVWF)
+004F   00CB           00196 MOVWF YUZLER_BASAMAGI
+0050                  00197 LOOP_YUZLER
+Warning[203]: Found opcode in column 1. (INCF)
+0050   0ACB           00198 INCF YUZLER_BASAMAGI,F
+Warning[203]: Found opcode in column 1. (MOVLW)
+0051   3064           00199 MOVLW .100
+Warning[203]: Found opcode in column 1. (SUBWF)
+0052   02A4           00200 SUBWF 0X24,F
+Warning[203]: Found opcode in column 1. (BTFSC)
+0053   1803           00201 BTFSC STATUS,0
+Warning[203]: Found opcode in column 1. (GOTO)
+0054   2850           00202 GOTO LOOP_YUZLER
+Warning[203]: Found opcode in column 1. (RETURN)
+0055   0008           00203 RETURN
+                      00204 
+0056                  00205 my_lookUP_table
+0056   0782           00206  addwf PCL, F;
+0057   343F           00207  retlw 0x3F;0
+0058   3406           00208  retlw 0x06;1
+0059   345B           00209  retlw 0x5B;2
+005A   344F           00210  retlw 0x4F;3
+005B   3466           00211  retlw 0x66;4
+005C   346D           00212  retlw 0x6D;5
+005D   347D           00213  retlw 0x7D;6
+005E   3407           00214  retlw 0x07;7
+005F   347F           00215  retlw 0x7F;8
+0060   346F           00216  retlw 0x6F;9
+0061   3477           00217  retlw 0x77;A
+0062   347C           00218  retlw 0x7C;b
+0063   3439           00219  retlw 0x39;C
+0064   345E           00220  retlw 0x5E;d
+0065   3479           00221  retlw 0x79;E
+0066   3471           00222  retlw 0x71;F
+0067   3480           00223  retlw 0x80;.
+                      00224  
+                      00225 
+0068                  00226 DELAY_50_MSEC
+Warning[203]: Found opcode in column 1. (movlw)
+0068   3050           00227 movlw .80;
+Warning[203]: Found opcode in column 1. (movwf)
+0069   00A5           00228 movwf Counter_Outer;
+Warning[203]: Found opcode in column 1. (movlw)
+006A   30C5           00229 movlw .197;
+Warning[203]: Found opcode in column 1. (movwf)
+006B   00A6           00230 movwf Counter_Inner;
+006C                  00231 Loop_Outer
+006C   00A6           00232  movwf Counter_Inner;
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[207]: Found label after column 1. (Loop_Inner)
+006D                  00233  Loop_Inner
+006D   0BA6           00234  decfsz Counter_Inner, F;
+006E   286D           00235  goto Loop_Inner;
+006F   0BA5           00236  decfsz Counter_Outer, F;
+Warning[203]: Found opcode in column 1. (goto)
+0070   286C           00237 goto Loop_Outer;
+Warning[203]: Found opcode in column 1. (RETURN)
+0071   0008           00238 RETURN
+                      00239 
+                      00240 ;
+                      00241 ;Gecikme 
+                      00242 ;movlw N;
+                      00243 ;movwf Counter;
+                      00244 ;;bsf PORTB,0;
+                      00245 ;nop;
+                      00246 ;nop;
+                      00247 ;LOOOP
+                      00248 ;decfsz Counter,F;
+                      00249 ;goto LOOOP;
+                      00250 ;;bcf PORTB,0;
+                      00251 ;return
+Warning[205]: Found directive in column 1. (end)
+                      00252 end
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE  8
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ACKDT                             00000005
+ACKEN                             00000004
+ACKSTAT                           00000006
+ADCON0                            0000001F
+ADCON1                            0000009F
+ADCS0                             00000006
+ADCS1                             00000007
+ADCS2                             00000006
+ADDEN                             00000003
+ADFM                              00000007
+ADIE                              00000006
+ADIF                              00000006
+ADON                              00000000
+ADRESH                            0000001E
+ADRESL                            0000009E
+BCLIE                             00000003
+BCLIF                             00000003
+BF                                00000000
+BIRLER_BASAMAGI                   00000021
+BIRLER_BASAMAGINI_BUL             00000033
+BIRLER_BAS_GOSTER                 00000018
+BRGH                              00000002
+C                                 00000000
+C1INV                             00000004
+C1OUT                             00000006
+C2INV                             00000005
+C2OUT                             00000007
+CCP1CON                           00000017
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+CCP1Y                             00000004
+CCP2CON                           0000001D
+CCP2IE                            00000000
+CCP2IF                            00000000
+CCP2M0                            00000000
+CCP2M1                            00000001
+CCP2M2                            00000002
+CCP2M3                            00000003
+CCP2X                             00000005
+CCP2Y                             00000004
+CCPR1                             00000015
+CCPR1H                            00000016
+CCPR1L                            00000015
+CCPR2                             0000001B
+CCPR2H                            0000001C
+CCPR2L                            0000001B
+CHS0                              00000003
+CHS1                              00000004
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE  9
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CHS2                              00000005
+CIS                               00000003
+CKE                               00000006
+CKP                               00000004
+CM0                               00000000
+CM1                               00000001
+CM2                               00000002
+CMCON                             0000009C
+CMIE                              00000006
+CMIF                              00000006
+CREN                              00000004
+CSRC                              00000007
+CVR0                              00000000
+CVR1                              00000001
+CVR2                              00000002
+CVR3                              00000003
+CVRCON                            0000009D
+CVREN                             00000007
+CVROE                             00000006
+CVRR                              00000005
+Counter                           00000027
+Counter_Inner                     00000026
+Counter_Outer                     00000025
+D                                 00000005
+DATA_ADDRESS                      00000005
+DC                                00000001
+DELAY_50_MSEC                     00000068
+D_A                               00000005
+D_NOT_A                           00000005
+EEADR                             0000010D
+EEADRH                            0000010F
+EECON1                            0000018C
+EECON2                            0000018D
+EEDATA                            0000010C
+EEDATH                            0000010E
+EEIE                              00000004
+EEIF                              00000004
+EEPGD                             00000007
+F                                 00000001
+FERR                              00000002
+FSR                               00000004
+GCEN                              00000007
+GIE                               00000007
+GO                                00000002
+GO_DONE                           00000002
+GO_NOT_DONE                       00000002
+I2C_DATA                          00000005
+I2C_READ                          00000002
+I2C_START                         00000003
+I2C_STOP                          00000004
+IBF                               00000007
+IBOV                              00000005
+INDF                              00000000
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE 10
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+LOOP                              0000000D
+LOOP_BIRLER                       00000035
+LOOP_ONLAR                        00000040
+LOOP_Onlar                        00000045
+LOOP_YUZLER                       00000050
+Loop_Inner                        0000006D
+Loop_Outer                        0000006C
+N                                 00000010
+NOT_A                             00000005
+NOT_ADDRESS                       00000005
+NOT_BO                            00000000
+NOT_BOR                           00000000
+NOT_DONE                          00000002
+NOT_PD                            00000003
+NOT_POR                           00000001
+NOT_RBPU                          00000007
+NOT_RC8                           00000006
+NOT_T1SYNC                        00000002
+NOT_TO                            00000004
+NOT_TX8                           00000006
+NOT_W                             00000002
+NOT_WRITE                         00000002
+OBF                               00000006
+OERR                              00000001
+ONLAR_BASAMAGI                    00000022
+ONLAR_BASAMAGINI_BUL              0000003C
+ONLAR_BAS_GOSTER                  00000021
+OPTION_REG                        00000081
+P                                 00000004
+PCFG0                             00000000
+PCFG1                             00000001
+PCFG2                             00000002
+PCFG3                             00000003
+PCL                               00000002
+PCLATH                            0000000A
+PCON                              0000008E
+PEIE                              00000006
+PEN                               00000002
+PIE1                              0000008C
+PIE2                              0000008D
+PIR1                              0000000C
+PIR2                              0000000D
+PORTA                             00000005
+PORTB                             00000006
+PORTC                             00000007
+PORTD                             00000008
+PORTE                             00000009
+PR2                               00000092
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE 11
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+PSPIE                             00000007
+PSPIF                             00000007
+PSPMODE                           00000004
+R                                 00000002
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RA5                               00000005
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RC0                               00000000
+RC1                               00000001
+RC2                               00000002
+RC3                               00000003
+RC4                               00000004
+RC5                               00000005
+RC6                               00000006
+RC7                               00000007
+RC8_9                             00000006
+RC9                               00000006
+RCD8                              00000000
+RCEN                              00000003
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             0000001A
+RCSTA                             00000018
+RD                                00000000
+RD0                               00000000
+RD1                               00000001
+RD2                               00000002
+RD3                               00000003
+RD4                               00000004
+RD5                               00000005
+RD6                               00000006
+RD7                               00000007
+RE0                               00000000
+RE1                               00000001
+RE2                               00000002
+READ_WRITE                        00000002
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE 12
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RP0                               00000005
+RP1                               00000006
+RSEN                              00000001
+RX9                               00000006
+RX9D                              00000000
+R_NOT_W                           00000002
+R_W                               00000002
+S                                 00000003
+SAYAC                             00000028
+SEN                               00000000
+SMP                               00000007
+SPBRG                             00000099
+SPEN                              00000007
+SREN                              00000005
+SSPADD                            00000093
+SSPBUF                            00000013
+SSPCON                            00000014
+SSPCON2                           00000091
+SSPEN                             00000005
+SSPIE                             00000003
+SSPIF                             00000003
+SSPM0                             00000000
+SSPM1                             00000001
+SSPM2                             00000002
+SSPM3                             00000003
+SSPOV                             00000006
+SSPSTAT                           00000094
+STATUS                            00000003
+SYNC                              00000004
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000010
+T1INSYNC                          00000002
+T1OSCEN                           00000003
+T1SYNC                            00000002
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000012
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR1CS                            00000001
+TMR1H                             0000000F
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1L                             0000000E
+TMR1ON                            00000000
+TMR2                              00000011
+TMR2IE                            00000001
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE 13
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TMR2IF                            00000001
+TMR2ON                            00000002
+TOUTPS0                           00000003
+TOUTPS1                           00000004
+TOUTPS2                           00000005
+TOUTPS3                           00000006
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISA5                            00000005
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+TRISC                             00000087
+TRISC0                            00000000
+TRISC1                            00000001
+TRISC2                            00000002
+TRISC3                            00000003
+TRISC4                            00000004
+TRISC5                            00000005
+TRISC6                            00000006
+TRISC7                            00000007
+TRISD                             00000088
+TRISD0                            00000000
+TRISD1                            00000001
+TRISD2                            00000002
+TRISD3                            00000003
+TRISD4                            00000004
+TRISD5                            00000005
+TRISD6                            00000006
+TRISD7                            00000007
+TRISE                             00000089
+TRISE0                            00000000
+TRISE1                            00000001
+TRISE2                            00000002
+TRMT                              00000001
+TX8_9                             00000006
+TX9                               00000006
+TX9D                              00000000
+TXD8                              00000000
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             00000019
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE 14
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TXSTA                             00000098
+UA                                00000001
+W                                 00000000
+WCOL                              00000007
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+YUZLER_BASAMAGI                   0000004B
+YUZLER_BASAMAGINI_BUL             0000004C
+YUZLER_BAS_GOSTER                 0000002A
+Z                                 00000002
+_BODEN_OFF                        00003FBF
+_BODEN_ON                         00003FFF
+_CONFIG                           00002007
+_CPD_OFF                          00003FFF
+_CPD_ON                           00003EFF
+_CP_ALL                           00001FFF
+_CP_OFF                           00003FFF
+_DEBUG_OFF                        00003FFF
+_DEBUG_ON                         000037FF
+_DEVID1                           00002006
+_HS_OSC                           00003FFE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_LP_OSC                           00003FFC
+_LVP_OFF                          00003F7F
+_LVP_ON                           00003FFF
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC                           00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_WRT_1FOURTH                      00003BFF
+_WRT_256                          00003DFF
+_WRT_HALF                         000039FF
+_WRT_OFF                          00003FFF
+_XT_OSC                           00003FFD
+__16F877A                         00000001
+__DEBUG                           1
+deger                             0000005A
+my_lookUP_table                   00000056
+trig                              00000020
+MPASM  5.42                 MESAFE_SENSOR.ASM   9-28-2019  20:21:39         PAGE 15
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XX--------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:   114
+Program Memory Words Free:  8078
+
+
+Errors   :     0
+Warnings :    74 reported,     0 suppressed
+Messages :     7 reported,     0 suppressed
+
+
